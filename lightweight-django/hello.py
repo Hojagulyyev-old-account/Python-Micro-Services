@@ -10,6 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(32))
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 
+BASE_DIR = os.path.dirname(__file__)
 
 settings.configure(
     DEBUG=DEBUG,
@@ -21,6 +22,19 @@ settings.configure(
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ),
+    INSTALLED_APPS=(
+        'django.contrib.staticfiles',
+    ),
+    TEMPLATES=(
+        {
+            'BACKEND': 'django.template.backends.django.DjangoTemplates',
+            'DIRS': (os.path.join(BASE_DIR, 'templates'), ),
+        },
+    ),
+    STATICFILES_DIRS=(
+        os.path.join(BASE_DIR, 'static'),
+    ),
+    STATIC_URL='/static/',
 )
 
 from django.urls import path, re_path
@@ -32,16 +46,17 @@ from django.shortcuts import render
 
 # views.py
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {})
 
 def about(request):
-    return render(request, 'about.html')
+    return render(request, 'about.html', {})
 
 def exone(request):
-    return render(request, 'exercises/exercise-1.html')
+    return render(request, 'exercises/exercise-1.html', {})
 
 # urls.py
 urlpatterns = []
+
 my_urlpatterns = [
     rpath(view=index),
     rpath('about/', about),
